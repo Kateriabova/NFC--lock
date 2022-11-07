@@ -1,8 +1,6 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QLabel, QLCDNumber, QCheckBox, QMainWindow, QDialog
 import sys
-from choice_kab import Kab
-from choice_time import Time
 
 def excepthook(exc_type, exc_value, exc_tb):
     tb = "".join(traceback.format_exception(exc_type, exc_value, exc_tb))
@@ -14,19 +12,13 @@ def excepthook(exc_type, exc_value, exc_tb):
 
 sys.excepthook = excepthook
 
-class Access(QDialog):
+class Kab(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi('choice_form.ui', self)
-        self.time.clicked.connect(self.choice_time)
-        self.kab.clicked.connect(self.choice_kab)
-    """def ret(self):
-        self.close()"""
+        uic.loadUi('kab_choice.ui', self)
 
-    def choice_time(self):
-        self.tm = Time()
-        self.tm.show()
+        self.ok.clicked.connect(self.ret)
 
-    def choice_kab(self):
-        self.kb = Kab()
-        self.kb.show()
+
+    def ret(self):
+        self.close()
