@@ -2,7 +2,7 @@ import sqlite3
 
 students = sqlite3.connect("students.sqlite")
 cur1 = students.cursor()
-cur1.execute("""CREATE TABLE IF NOT EXISTS users(
+cur1.execute("""CREATE TABLE IF NOT EXISTS students(
    familia TEXT,
    name TEXT,
    father TEXT,
@@ -11,25 +11,36 @@ cur1.execute("""CREATE TABLE IF NOT EXISTS users(
    numbercard TEXT);
 """)
 students.commit()
-information =
-cur1.execute("INSERT INTO users (pupillogin, pupilpassword) VALUES(?, ?)", inf)
-users.commit()
+information = ('Рябова', 'Екатерина', 'Николавна', '10В', 'riabovakate@yandex.ru', '1043110')
+cur1.execute("INSERT INTO students (familia, name, father, class, email, numbercard) VALUES(?, ?, ?, ?, ?, ?)", information)
+students.commit()
+information = ('Поплавский', 'Даниил', 'Евгеньевич', '11Т', 'viKing17a@yandex.ru', '1717115')
+cur1.execute("INSERT INTO students (familia, name, father, class, email, numbercard) VALUES(?, ?, ?, ?, ?, ?)", information)
+students.commit()
+information = ('Еленик', 'Татьяна', 'Ильинична', '10В', 'eleniktanya@gmail.com', '9090909')
+cur1.execute("INSERT INTO students (familia, name, father, class, email, numbercard) VALUES(?, ?, ?, ?, ?, ?)", information)
+students.commit()
+information = ('Мкртчян', 'Алина', 'Никитична', '10В', 'alinamkr@yandex.ru', '2043110')
+cur1.execute("INSERT INTO students (familia, name, father, class, email, numbercard) VALUES(?, ?, ?, ?, ?, ?)", information)
+students.commit()
+information = ('Поттер', 'Гарри', 'Джеймсович', '10В', 'harrypotter@yandex.ru', '1052110')
+cur1.execute("INSERT INTO students (familia, name, father, class, email, numbercard) VALUES(?, ?, ?, ?, ?, ?)", information)
+students.commit()
+information = ('Андреев', 'Сергей', 'Анатольевич', '5Д', 'andreevs@yandex.ru', '1043250')
+cur1.execute("INSERT INTO students (familia, name, father, class, email, numbercard) VALUES(?, ?, ?, ?, ?, ?)", information)
+students.commit()
+information = ('Яшина', 'Василиса', 'Константиновна', '5Д', 'vas@yandex.ru', '1009110')
+cur1.execute("INSERT INTO students (familia, name, father, class, email, numbercard) VALUES(?, ?, ?, ?, ?, ?)", information)
+students.commit()
+information = ('Гончарова', 'Юлия', 'Денисовна', '10В', 'saweteen@yandex.ru', '7778123')
+cur1.execute("INSERT INTO students (familia, name, father, class, email, numbercard) VALUES(?, ?, ?, ?, ?, ?)", information)
+students.commit()
+information = ('Гончарова', 'Юлия', 'Денисовна', '5Д', 'bzzzz@yandex.ru', '1234567')
+cur1.execute("INSERT INTO students (familia, name, father, class, email, numbercard) VALUES(?, ?, ?, ?, ?, ?)", information)
+students.commit()
+information = ('Мкртчян', 'Георгий', 'Артемович', '11Т', 'goshan@gmail.com', '0000000')
+cur1.execute("INSERT INTO students (familia, name, father, class, email, numbercard) VALUES(?, ?, ?, ?, ?, ?)", information)
+students.commit()
 
-with open('students.csv', 'r', encoding='utf-8') as file_1:
-    stud_bd = csv.reader(file_1, delimiter=';')
-    y = True
-    name = input()
-    god_0 = input().split()
-    god_1 = god_0[1]
-    god_0 = god_0[0]
-    stroki = list(filter(lambda y: y[1] == name, stroki))
 
-    stroki = list(map(lambda z: [z[0], z[int(god_0) - 2013], z[int(god_1) - 2013]], stroki))
 
-    stroki = list(filter(lambda q: (int(q[2]) * 100) // int(q[1]) < 104, stroki))
-    if len(stroki) == 0:
-        y = False
-    a = [['Субъект', god_0, god_1]]
-    stroki = list(map(lambda d: ';'.join(d), a + stroki))
-    if y:
-        res.write('\n'.join(stroki))

@@ -14,7 +14,7 @@ def excepthook(exc_type, exc_value, exc_tb):
 sys.excepthook = excepthook
 
 class Student(QMainWindow):
-    def __init__(self, fio={'familia': 'Рябова', 'name': 'Екатерина', 'father': 'Николевна', 'class': '10В', 'right_now': 'not in school'}):
+    def __init__(self, fio={'number': '509', 'foto': '509.jpg'}):
         super().__init__()
 
         uic.loadUi('student.ui', self)
