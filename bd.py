@@ -1,6 +1,6 @@
 import sqlite3
 
-students = sqlite3.connect("students.sqlite")
+teachers = sqlite3.connect("students.sqlite")
 cur1 = students.cursor()
 cur1.execute("""CREATE TABLE IF NOT EXISTS students(
    familia TEXT,
