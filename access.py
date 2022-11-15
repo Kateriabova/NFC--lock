@@ -32,10 +32,10 @@ class Access_1(QDialog):
 
         with open('db/number_kab.txt', 'r') as f:
             kab = f.readline().strip()
-            le = sqlite3.connect("db/accesess.sqlite")
+            le = sqlite3.connect("db/students.sqlite")
             cur2 = le.cursor()
             a = int(cur2.execute('''SELECT * from accesses''').fetchall()[-1][-2]) + 1
-            times = sqlite3.connect("db/lessons.sqlite")
+            times = sqlite3.connect("db/students.sqlite")
             cur = times.cursor()
             que = '''SELECT * from ti'''
             data = cur.execute(que, ).fetchall()

@@ -36,9 +36,9 @@ class Time(QDialog):
         t = (t_1, t_2)
         self.times = [t]
         for i in self.numbers:
-            le = le = sqlite3.connect("db/lessons.sqlite")
+            le = le = sqlite3.connect("db/students.sqlite")
             cur2 = le.cursor()
-            que = '''SELECT * from accesses WHERE number = ?'''
+            que = '''SELECT * from lessons WHERE number = ?'''
             data = cur2.execute(que, (i,)).fetchall()
             b = data[0][1]
             e = data[0][2]
@@ -46,7 +46,7 @@ class Time(QDialog):
             t_2 = a + ' ' + e + ':00'
             t = (t_1, t_2)
             self.times.append(t)
-        times = sqlite3.connect("db/lessons.sqlite")
+        times = sqlite3.connect("db/students.sqlite")
         cur2 = times.cursor()
         cur2.execute("""CREATE TABLE IF NOT EXISTS ti(
            time_b TEXT, 

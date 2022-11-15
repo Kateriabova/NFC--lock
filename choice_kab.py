@@ -19,7 +19,7 @@ class Kab(QDialog):
     def __init__(self):
         super().__init__()
         uic.loadUi('ui/kab_choice.ui', self)
-        kab = sqlite3.connect("db/kab.sqlite")
+        kab = sqlite3.connect("db/students.sqlite")
         cur = kab.cursor()
         que = '''SELECT * from kab'''
         data = cur.execute(que).fetchall()

@@ -52,7 +52,7 @@
            <x>0</x>
            <y>0</y>
            <width>778</width>
-           <height>397</height>
+           <height>365</height>
           </rect>
          </property>
          <widget class="QTableWidget" name="table">
@@ -85,6 +85,18 @@
       </property>
       <property name="text">
        <string>дать доступ</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="back">
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>назад</string>
       </property>
      </widget>
     </item>

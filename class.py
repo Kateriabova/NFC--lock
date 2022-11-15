@@ -8,6 +8,7 @@ import traceback
 import sqlite3
 import datetime as dt
 from student import Student
+from find_page import Find
 
 
 
@@ -26,6 +27,7 @@ class Klass(QMainWindow):
         super().__init__()
         self.teacher_email = teacher_email
         self.num = number
+        self.back.clicked.connect(self.returning)
         uic.loadUi('class.ui', self)
         self.name.setText(self.name)
 
@@ -77,3 +79,7 @@ class Klass(QMainWindow):
         self.st = Student(self.teacher_email, fio)
         self.close()
         self.st.show()
+    def returning(self):
+        self.fn = Find(self.teacher_email)
+        self.close()
+        self.fn.show()

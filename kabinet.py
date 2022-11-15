@@ -7,6 +7,7 @@ from access import Access_2
 from PyQt5.QtGui import QPixmap
 import traceback
 import sqlite3
+from find_page import Find
 
 
 def excepthook(exc_type, exc_value, exc_tb):
@@ -28,7 +29,7 @@ class Kabinet(QMainWindow):
         uic.loadUi('ui/kab.ui', self)
         self.number.setText(information['number'][3:])
         self.number.setReadOnly(True)
-
+        self.back.clicked.connect(self.returning)
         self.label = QLabel('1234567890')
         self.label.setMaximumSize(200, 300)
         file = Image.open(information['foto'])
@@ -37,7 +38,7 @@ class Kabinet(QMainWindow):
         self.label.setPixmap(pixmap)
         self.horizontalLayout.addWidget(self.label)
 
-        accesses = sqlite3.connect("db/accesess.sqlite")
+        accesses = sqlite3.connect("db/students.sqlite")
         cur2 = accesses.cursor()
         data = cur2.execute("""SELECT * FROM accesses
                                     WHERE kab = ?""", (self.information['number'],)).fetchall()
@@ -69,7 +70,7 @@ class Kabinet(QMainWindow):
     def delete(self):
         name, ok_pressed = QInputDialog.getText(self, "Подтвердите свои полномочия",
                                                 "Введите key")
-        accesses = sqlite3.connect("db/accesess.sqlite")
+        accesses = sqlite3.connect("db/students.sqlite")
         cur2 = accesses.cursor()
         x = self.sender()
         em = x.text()[9:].split()[-1]
@@ -101,3 +102,8 @@ class Kabinet(QMainWindow):
                 else:
                     self.table.setRowCount(len(data))
                     self.table.setColumnCount(0)
+
+    def returning(self):
+        self.fn = Find(self.teacher_email)
+        self.close()
+        self.fn.show()

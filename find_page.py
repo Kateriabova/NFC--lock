@@ -6,9 +6,11 @@ from student import Student
 from kabinet import Kabinet
 from klass import Klass
 from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QLabel, QLCDNumber, QCheckBox, QMainWindow, QDialog, QTableWidget
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QLabel, QLCDNumber, QCheckBox, QMainWindow, \
+    QDialog, QTableWidget
 import sys
 import sqlite3
+
 
 class Find(QMainWindow):
     def __init__(self, email):
@@ -97,7 +99,6 @@ class Find(QMainWindow):
                 que = '''SELECT * from students'''
                 data = cur.execute(que).fetchall()
 
-
             self.table_find.setRowCount(len(data))
             self.table_find.setColumnCount(len(data[0]) + 2)
 
@@ -112,7 +113,7 @@ class Find(QMainWindow):
                 for i, val in enumerate(elem):
                     self.table_find.setItem(j, i + 2, QTableWidgetItem(val))
         if text == "кабинет":
-            kab = sqlite3.connect("db/kab.sqlite")
+            kab = sqlite3.connect("db/students.sqlite")
             cur = kab.cursor()
             if self.x:
                 if self.some == '':
@@ -182,7 +183,6 @@ class Find(QMainWindow):
         self.close()
         self.st.show()
 
-
     def classes(self):
         x = self.sender()
         num = x.text()[:-2]
@@ -193,7 +193,7 @@ class Find(QMainWindow):
     def kabs(self):
         x = self.sender()
         num = x.text()[:-2]
-        kabs = sqlite3.connect("db/kab.sqlite")
+        kabs = sqlite3.connect("db/students.sqlite")
         cur = kabs.cursor()
 
         que = '''SELECT * from kab WHERE number = ?'''

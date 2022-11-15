@@ -2,12 +2,13 @@ import traceback
 
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QLabel, QLCDNumber, QCheckBox, QMainWindow, \
-    QDialog, QTableWidgetItem, QInputDialog
+    QDialog, QTableWidgetItem, QInputDialog, QMessageBox
 import sys
 from access import Access_1
 import sqlite3
 import datetime as dt
 import csv
+from find_page import Find
 
 
 def excepthook(exc_type, exc_value, exc_tb):
@@ -33,7 +34,7 @@ class Student(QMainWindow):
         self.name.setText(self.fio['name'])
         self.father.setText(self.fio['father'])
         self.class_2.setText(self.fio['class'])
-
+        self.back.clicked.connect(self.returning)
         self.familia.setReadOnly(True)
         self.name.setReadOnly(True)
         self.father.setReadOnly(True)
@@ -55,22 +56,26 @@ class Student(QMainWindow):
             for i, elem in enumerate(data):
                 self.table_lessons.setItem(i, 0, QTableWidgetItem(elem))
 
-        accesses = sqlite3.connect("db/accesess.sqlite")
+        accesses = sqlite3.connect("db/students.sqlite")
         cur2 = accesses.cursor()
         data = cur2.execute("""SELECT * FROM accesses
                             WHERE mail_of_student = ?""", (self.fio['email'],)).fetchall()
-        self.table_kab.setRowCount(len(data))
-        self.table_kab.setColumnCount(len(data[0]))
-        for i, elem in enumerate(data):
+        if len(data) != 0:
+            self.table_kab.setRowCount(len(data))
+            self.table_kab.setColumnCount(len(data[0]))
+            for i, elem in enumerate(data):
 
-            for j, val in enumerate(elem):
-                if j != 0:
-                    self.table_kab.setItem(i, j - 1, QTableWidgetItem(val))
+                for j, val in enumerate(elem):
+                    if j != 0:
+                        self.table_kab.setItem(i, j - 1, QTableWidgetItem(val))
 
             self.btn = QPushButton('ОТМЕНИТЬ  id = ' + str(elem[5]))
             self.btn.clicked.connect(self.delete)
             self.table_kab.setCellWidget(i, 5, self.btn)  # (r, c)
             self.btn.setObjectName('btn' + self.fio['email'])
+        else:
+            self.table_kab.setRowCount(len(data))
+            self.table_kab.setColumnCount(0)
 
     def access(self):
         stu = [self.fio['email']]
@@ -80,7 +85,7 @@ class Student(QMainWindow):
     def delete(self):
         name, ok_pressed = QInputDialog.getText(self, "Подтвердите свои полномочия",
                                                 "Введите key")
-        accesses = sqlite3.connect("db/accesess.sqlite")
+        accesses = sqlite3.connect("db/students.sqlite")
         cur2 = accesses.cursor()
         x = self.sender()
         em = x.text()[9:].split()[-1]
@@ -89,26 +94,35 @@ class Student(QMainWindow):
             if name == data[0][0]:
                 cur2.execute("""DELETE FROM accesses WHERE id = ?""", (em,))
                 accesses.commit()
+                accesses = sqlite3.connect("db/students.sqlite")
+                cur2 = accesses.cursor()
                 data = cur2.execute("""SELECT * FROM accesses
-                                                    WHERE kab = ?""", (self.information['number'],)).fetchall()
+                                            WHERE mail_of_student = ?""", (self.fio['email'],)).fetchall()
                 if len(data) != 0:
                     self.table_kab.setRowCount(len(data))
-                    self.table_kab.setColumnCount(len(data[0]) - 2)
-
+                    self.table_kab.setColumnCount(len(data[0]))
                     for i, elem in enumerate(data):
 
                         for j, val in enumerate(elem):
-                            if j != 5 and j != 6 and j != 1:
-                                if j == 0:
-                                    self.table_kab.setItem(i, j, QTableWidgetItem(val))
-                                else:
-                                    self.table_kab.setItem(i, j - 1, QTableWidgetItem(val))
+                            if j != 0:
+                                self.table_kab.setItem(i, j - 1, QTableWidgetItem(val))
 
-                        self.btn = QPushButton('ОТМЕНИТЬ id = ' + str(elem[5]))
-                        self.btn.clicked.connect(self.delete)
-                        self.table_kab.setCellWidget(i, 4, self.btn)  # (r, c)
-                        self.btn.setObjectName('btn' + str(elem[5]))
+                    self.btn = QPushButton('ОТМЕНИТЬ  id = ' + str(elem[5]))
+                    self.btn.clicked.connect(self.delete)
+                    self.table_kab.setCellWidget(i, 5, self.btn)  # (r, c)
+                    self.btn.setObjectName('btn' + self.fio['email'])
                 else:
                     self.table_kab.setRowCount(len(data))
                     self.table_kab.setColumnCount(0)
+            else:
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Critical)
+                msg.setText("неверный key")
+                msg.setWindowTitle("Error")
+                msg.exec_()
+
+    def returning(self):
+        self.fn = Find(self.teacher_email)
+        self.close()
+        self.fn.show()
 
