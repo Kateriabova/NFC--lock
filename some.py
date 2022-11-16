@@ -1,9 +1,9 @@
 from PIL import Image
 from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QLabel, QLCDNumber, QCheckBox, QMainWindow, \
-    QDialog, QTableWidgetItem, QInputDialog
+from PyQt5.QtWidgets import QApplication, QPushButton, QLabel, QMainWindow, \
+    QTableWidgetItem, QInputDialog
 import sys
-from access import Access
+from py.access import Access
 from PyQt5.QtGui import QPixmap
 import traceback
 import sqlite3

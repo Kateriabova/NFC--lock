@@ -1,14 +1,11 @@
-from PIL import Image
 from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QLabel, QLCDNumber, QCheckBox, QMainWindow, QDialog, QTableWidgetItem
+from PyQt5.QtWidgets import QPushButton, QMainWindow, QTableWidgetItem
 import sys
-from access import Access
-from PyQt5.QtGui import QPixmap
+from access import Access_1
 import traceback
 import sqlite3
 import datetime as dt
-from student import Student
-from find_page import Find
+from py.student import Student
 
 
 
@@ -27,46 +24,45 @@ class Klass(QMainWindow):
         super().__init__()
         self.teacher_email = teacher_email
         self.num = number
-        self.back.clicked.connect(self.returning)
-        uic.loadUi('class.ui', self)
-        self.name.setText(self.name)
+        uic.loadUi('ui/class.ui', self)
+        self.name.setText(self.num)
 
         now = dt.date.today().weekday()
         name_file = 'db/' + str(now) + '.csv'
         with open(name_file, 'r', encoding='windows-1251') as f:
             classes = f.readline().rstrip().split(';')
             data_2 = [i.rstrip().split(';') for i in f.readlines()]
-            key = classes.index(self.fio['class'])
+            key = classes.index(self.num)
             data = []
             for i in data_2:
                 data.append(i[key])
             self.table_lessons.setRowCount(len(data))
             self.table_lessons.setColumnCount(1)
             for i, elem in enumerate(data):
-                self.table_lessons.setItem(0, 1, QTableWidgetItem(elem))
-        students = sqlite3.connect("db/students.sqlite")
+                self.table_lessons.setItem(i, 0, QTableWidgetItem(elem))
+        students = sqlite3.connect("../db/students.sqlite")
         cur2 = students.cursor()
         data = cur2.execute("""SELECT * FROM students
                                     WHERE class = ?""", (self.num,)).fetchall()
         self.table_class.setRowCount(len(data))
         self.table_class.setColumnCount(2)
         for i, elem in enumerate(data):
-            self.table_lesson.setItem(i, 1, QTableWidgetItem(elem[0]))
+            self.table_class.setItem(i, 1, QTableWidgetItem(elem[0]))
             self.btn = QPushButton(elem[4] + '->')
             self.btn.clicked.connect(self.study)
-            self.table.setCellWidget(i, 0, self.btn)  # (r, c)
+            self.table_class.setCellWidget(i, 0, self.btn)  # (r, c)
             self.btn.setObjectName('btn' + elem[4])
 
 
     def access(self):
         stu = []
-        self.acs = Access(self.teacher_email, stu)
+        self.acs = Access_1(self.teacher_email, stu)
         self.acs.show()
 
     def study(self):
         x = self.sender()
         email = x.text()[:-2]
-        students = sqlite3.connect("db/students.sqlite")
+        students = sqlite3.connect("../db/students.sqlite")
         cur = students.cursor()
 
         que = '''SELECT * from students WHERE students.email = ?'''
@@ -79,7 +75,3 @@ class Klass(QMainWindow):
         self.st = Student(self.teacher_email, fio)
         self.close()
         self.st.show()
-    def returning(self):
-        self.fn = Find(self.teacher_email)
-        self.close()
-        self.fn.show()

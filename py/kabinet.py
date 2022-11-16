@@ -1,7 +1,7 @@
 from PIL import Image
 from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QLabel, QLCDNumber, QCheckBox, QMainWindow, \
-    QDialog, QTableWidgetItem, QInputDialog
+from PyQt5.QtWidgets import QPushButton, QLabel, QMainWindow, \
+    QTableWidgetItem, QInputDialog
 import sys
 from access import Access_2
 from PyQt5.QtGui import QPixmap
@@ -38,7 +38,7 @@ class Kabinet(QMainWindow):
         self.label.setPixmap(pixmap)
         self.horizontalLayout.addWidget(self.label)
 
-        accesses = sqlite3.connect("db/students.sqlite")
+        accesses = sqlite3.connect("../db/students.sqlite")
         cur2 = accesses.cursor()
         data = cur2.execute("""SELECT * FROM accesses
                                     WHERE kab = ?""", (self.information['number'],)).fetchall()
@@ -70,7 +70,7 @@ class Kabinet(QMainWindow):
     def delete(self):
         name, ok_pressed = QInputDialog.getText(self, "Подтвердите свои полномочия",
                                                 "Введите key")
-        accesses = sqlite3.connect("db/students.sqlite")
+        accesses = sqlite3.connect("../db/students.sqlite")
         cur2 = accesses.cursor()
         x = self.sender()
         em = x.text()[9:].split()[-1]
@@ -103,7 +103,7 @@ class Kabinet(QMainWindow):
                     self.table.setRowCount(len(data))
                     self.table.setColumnCount(0)
 
-    def returning(self):
+    def returning(self): #возврат на страницу поиска
         self.fn = Find(self.teacher_email)
         self.close()
         self.fn.show()

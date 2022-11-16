@@ -1,13 +1,11 @@
-from PIL import Image
 from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QLabel, QLCDNumber, QCheckBox, QMainWindow, QDialog, QTableWidgetItem
+from PyQt5.QtWidgets import QApplication, QPushButton, QMainWindow, QTableWidgetItem
 import sys
-from access import Access_1
-from PyQt5.QtGui import QPixmap
+from py.access import Access_1
 import traceback
 import sqlite3
 import datetime as dt
-from student import Student
+from py.student import Student
 
 
 
