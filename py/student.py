@@ -7,7 +7,7 @@ import sys
 from access import Access_1
 import sqlite3
 import datetime as dt
-from new_find import Find
+from find_page import Find
 
 
 def excepthook(exc_type, exc_value, exc_tb):
