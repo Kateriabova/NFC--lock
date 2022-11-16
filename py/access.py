@@ -5,8 +5,9 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QLabel, QLCDNumber, QCheckBox, QMainWindow, \
     QDialog, QMessageBox
 import sys
-from choice_kab import Kab
-from choice_time import Time
+from py.choice_kab import Kab
+from py.choice_time import Time
+from py.choice_student import Stu
 from random import random
 
 def excepthook(exc_type, exc_value, exc_tb):
@@ -101,5 +102,5 @@ class Access_2(QDialog): #класс второй с кнопками "выбр�
         self.tm.show()
 
     def choice_student(self): #переход к выбору ученика
-        self.st = St()
+        self.st = Stu()
         self.st.show()

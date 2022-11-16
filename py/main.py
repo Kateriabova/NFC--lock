@@ -5,7 +5,7 @@ import sys
 
 import traceback
 
-from find_page import Find
+from py.find_page import Find
 import sys
 import sqlite3
 

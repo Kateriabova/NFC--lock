@@ -2,9 +2,9 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QLabel, QLCDNumber, QCheckBox, QMainWindow, \
     QDialog, QTableWidgetItem
 import sys
-from student import Student
-from kabinet import Kabinet
-from klass import Klass
+from py.student import Student
+from py.kabinet import Kabinet
+from py.klass import Klass
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLineEdit, QLabel, QLCDNumber, QCheckBox, QMainWindow, \
     QDialog, QTableWidget
