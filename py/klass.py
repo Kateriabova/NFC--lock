@@ -6,7 +6,7 @@ import traceback
 import sqlite3
 import datetime as dt
 from py.student import Student
-from py.find_page import Find
+
 
 
 
@@ -42,7 +42,7 @@ class Klass(QMainWindow):
             self.table_lessons.setColumnCount(1)
             for i, elem in enumerate(data):
                 self.table_lessons.setItem(i, 0, QTableWidgetItem(elem)) #размещение распаисания
-        students = sqlite3.connect("../db/students.sqlite")
+        students = sqlite3.connect("db/students.sqlite")
         cur2 = students.cursor()
         data = cur2.execute("""SELECT * FROM students
                                     WHERE class = ?""", (self.num,)).fetchall() #список учеников в этом классе
@@ -54,11 +54,11 @@ class Klass(QMainWindow):
             self.btn.clicked.connect(self.study) #кнопка перехода на конкретного ученика
             self.table_class.setCellWidget(i, 0, self.btn)  # (r, c)
             self.btn.setObjectName('btn' + elem[4]) #информация об учениках класса в table widget
-
+        self.give_acces.clicked.connect(self.access)
 
     def access(self): #дать доступ
         stu = []
-        students = sqlite3.connect("../db/students.sqlite")
+        students = sqlite3.connect("db/students.sqlite")
         cur2 = students.cursor()
         data = cur2.execute("""SELECT * FROM students
                                             WHERE class = ?""", (self.num,)).fetchall()  # список учеников в этом классе
@@ -70,7 +70,7 @@ class Klass(QMainWindow):
     def study(self): #перейти к опр. ученику
         x = self.sender()
         email = x.text()[:-2] #логин ученика
-        students = sqlite3.connect("../db/students.sqlite")
+        students = sqlite3.connect("db/students.sqlite")
         cur = students.cursor()
 
         que = '''SELECT * from students WHERE students.email = ?'''
@@ -85,6 +85,4 @@ class Klass(QMainWindow):
         self.st.show()
 
     def returning(self): #возврат на страницу поиска
-        self.fn = Find(self.teacher_email)
         self.close()
-        self.fn.show()

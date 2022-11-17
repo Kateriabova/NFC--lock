@@ -7,7 +7,7 @@ from py.access import Access_2
 from PyQt5.QtGui import QPixmap
 import traceback
 import sqlite3
-from py.find_page import Find
+
 
 
 def excepthook(exc_type, exc_value, exc_tb):
@@ -38,10 +38,12 @@ class Kabinet(QMainWindow):
         self.label.setPixmap(pixmap)
         self.horizontalLayout.addWidget(self.label) #вставляем картинку
 
-        accesses = sqlite3.connect("../db/students.sqlite")
+        accesses = sqlite3.connect("db/students.sqlite")
         cur2 = accesses.cursor()
+
         data = cur2.execute("""SELECT * FROM accesses
-                                    WHERE kab = ?""", (self.information['number'],)).fetchall() #список учеников, у которых есть доступ в этот кабинет
+                                    WHERE kab = ?""", (self.information['number'][3:],)).fetchall() #список учеников, у которых есть доступ в этот кабинет
+        self.give_access.clicked.connect(self.access)
 
         if len(data) != 0: #если они есть, мы их вставляем в табличку
             self.table.setRowCount(len(data))
@@ -55,22 +57,22 @@ class Kabinet(QMainWindow):
                         else:
                             self.table.setItem(i, j - 1, QTableWidgetItem(val))
 
-                self.btn = QPushButton('ОТМЕНИТЬ id = ' + str(elem[5]))
-                self.btn.clicked.connect(self.delete)
-                self.table.setCellWidget(i, 4, self.btn)  # (r, c)
-                self.btn.setObjectName('btn' + str(elem[5])) #и вставляем кнопку "забрать доступ"
+                    self.btn = QPushButton('ОТМЕНИТЬ id = ' + str(elem[5]))
+                    self.btn.clicked.connect(self.delete)
+                    self.table.setCellWidget(i, 4, self.btn)  # (r, c)
+                    self.btn.setObjectName('btn' + str(elem[5])) #и вставляем кнопку "забрать доступ"
         else:
             self.table.setRowCount(len(data))
             self.table.setColumnCount(0) #если нет учеников, то таблица нулевая
 
     def access(self): #переход на страницу доступа
-        self.acs = Access_2(self.teacher_email, self.information['number'])
+        self.acs = Access_2(self.teacher_email, self.information['number'][3:])
         self.acs.show()
 
     def delete(self): #удаление доступа
         name, ok_pressed = QInputDialog.getText(self, "Подтвердите свои полномочия",
                                                 "Введите key") #сообщение, куда ввести ключ
-        accesses = sqlite3.connect("../db/students.sqlite")
+        accesses = sqlite3.connect("db/students.sqlite")
         cur2 = accesses.cursor()
         x = self.sender()
         em = x.text()[9:].split()[-1] #id удаляемого элемента
@@ -81,7 +83,7 @@ class Kabinet(QMainWindow):
                 cur2.execute("""DELETE FROM accesses WHERE id = ?""", (em,))
                 accesses.commit() #удаление и комит
                 data = cur2.execute("""SELECT * FROM accesses
-                                                    WHERE kab = ?""", (self.information['number'],)).fetchall()
+                                                    WHERE kab = ?""", (self.information['number'][3:],)).fetchall()
 
                 if len(data) != 0:
                     self.table.setRowCount(len(data))
@@ -95,15 +97,13 @@ class Kabinet(QMainWindow):
                                 else:
                                     self.table.setItem(i, j - 1, QTableWidgetItem(val))
 
-                        self.btn = QPushButton('ОТМЕНИТЬ id = ' + str(elem[5]))
-                        self.btn.clicked.connect(self.delete)
-                        self.table.setCellWidget(i, 4, self.btn)  # (r, c)
-                        self.btn.setObjectName('btn' + str(elem[5])) #заново формируется table widget с обновленной информацией
+                            self.btn = QPushButton('ОТМЕНИТЬ id = ' + str(elem[5]))
+                            self.btn.clicked.connect(self.delete)
+                            self.table.setCellWidget(i, 4, self.btn)  # (r, c)
+                            self.btn.setObjectName('btn' + str(elem[5])) #заново формируется table widget с обновленной информацией
                 else:
                     self.table.setRowCount(len(data))
                     self.table.setColumnCount(0)
 
     def returning(self): #возврат на страницу поиска
-        self.fn = Find(self.teacher_email)
         self.close()
-        self.fn.show()

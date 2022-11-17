@@ -28,7 +28,7 @@ class Entrence(QMainWindow):
         password = self.password.text()
         email_1 = self.email.text() #пользователь ввел пароль и логин
 
-        a = sqlite3.connect('../db/students.sqlite')
+        a = sqlite3.connect('db/students.sqlite')
         b = a.cursor()
 
         c = b.execute("""SELECT password FROM teachers
@@ -37,7 +37,7 @@ class Entrence(QMainWindow):
             if i[0] == password: #проверка на сопоставление логина и пароля
 
                 self.fn = Find(email_1)
-                en.close()
+                self.close()
                 self.fn.show() #переход на новую страницу поиска
             else:
                 msg = QMessageBox()

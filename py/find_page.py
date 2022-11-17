@@ -20,7 +20,7 @@ class Find(QMainWindow):
         uic.loadUi('ui/find.ui', self)
         self.choose.activated[str].connect(self.on_activated) #активация какой-то выборки
         self.find_btn.clicked.connect(self.find_some) #кнопка поиск
-        self.students = sqlite3.connect("../db/students.sqlite")
+        self.students = sqlite3.connect("db/students.sqlite")
         self.cur1 = self.students.cursor()
         self.y = False
         self.x = False #флажки
@@ -30,7 +30,7 @@ class Find(QMainWindow):
         self.some = self.find_line.text()
         if not self.y: #активирована ли выборка?
             self.some = self.find_line.text() #что мы ищем
-            students = sqlite3.connect("../db/students.sqlite")
+            students = sqlite3.connect("db/students.sqlite")
             cur = students.cursor()
             if self.some == '':
                 que = '''SELECT * from students'''
@@ -71,7 +71,7 @@ class Find(QMainWindow):
         self.text = text
 
         if text == 'ученик':
-            students = sqlite3.connect("../db/students.sqlite")
+            students = sqlite3.connect("db/students.sqlite")
             cur = students.cursor()
             if self.x:
 
@@ -113,7 +113,7 @@ class Find(QMainWindow):
                 for i, val in enumerate(elem):
                     self.table_find.setItem(j, i + 2, QTableWidgetItem(val)) #создание таблицы
         if text == "кабинет": #поиск по кабинету
-            kab = sqlite3.connect("../db/students.sqlite")
+            kab = sqlite3.connect("db/students.sqlite")
             cur = kab.cursor()
             if self.x:
                 if self.some == '': #ищем все
@@ -140,7 +140,7 @@ class Find(QMainWindow):
             for j, elem in enumerate(data):
                 self.table_find.setItem(j, 1, QTableWidgetItem(elem[0])) #заполняем табличку
         if text == 'класс': #если активирован "класс"
-            students = sqlite3.connect("../db/students.sqlite")
+            students = sqlite3.connect("db/students.sqlite")
             cur = students.cursor()
             if self.x:
                 if self.some == '':
@@ -169,7 +169,7 @@ class Find(QMainWindow):
     def study(self): #переход к нужному ученику
         x = self.sender()
         email = x.text()[:-2]
-        students = sqlite3.connect("../db/students.sqlite")
+        students = sqlite3.connect("db/students.sqlite")
         cur = students.cursor()
 
         que = '''SELECT * from students WHERE students.email = ?'''
@@ -180,20 +180,20 @@ class Find(QMainWindow):
         for i in range(len(f)):
             fio[f[i]] = data[0][i] #формирование набора данных для того, что бы закинуть их в объект нового класса
         self.st = Student(self.teacher_email, fio)
-        self.close()
+
         self.st.show() #создание объекта класса студент и переход в новое окно
 
     def classes(self): #переход к нужному кабинету
         x = self.sender()
         num = x.text()[:-2]
         self.kl = Klass(self.teacher_email, num) #создание объекта класса и переход к нему
-        self.close()
+
         self.kl.show()
 
     def kabs(self): #переход к кабинету
         x = self.sender()
         num = x.text()[:-2]
-        kabs = sqlite3.connect("../db/students.sqlite")
+        kabs = sqlite3.connect("db/students.sqlite")
         cur = kabs.cursor()
 
         que = '''SELECT * from kab WHERE number = ?''' #поиск нужного кабинета
@@ -204,5 +204,5 @@ class Find(QMainWindow):
         for i in range(len(f)):
             fio[f[i]] = 'db/' + data[0][i] #формирование набора данных, чтобы передать его в объект класса
         self.kb = Kabinet(self.teacher_email, fio)
-        self.close()
+
         self.kb.show() #создание объекта класса каб и переход к нему

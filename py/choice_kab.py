@@ -19,7 +19,7 @@ class Kab(QDialog):
     def __init__(self):
         super().__init__()
         uic.loadUi('ui/kab_choice.ui', self)
-        kab = sqlite3.connect("../db/students.sqlite")
+        kab = sqlite3.connect("db/students.sqlite")
         cur = kab.cursor()
         que = '''SELECT * from kab'''
         data = cur.execute(que).fetchall()
@@ -37,9 +37,9 @@ class Kab(QDialog):
         self.ok.clicked.connect(self.ret) #нажатие на кнопку ок
     def kabs(self): #выбрали кабинет
         x = self.sender().text()[:-2]
-        with open('../db/number_kab.txt', 'w') as f:
+        with open('db/number_kab.txt', 'w') as f:
             pass
-        with open('../db/number_kab.txt', 'w') as f:
+        with open('db/number_kab.txt', 'w') as f:
             print(x, file=f) #записали его в файл
 
     def ret(self):

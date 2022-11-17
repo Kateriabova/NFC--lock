@@ -32,25 +32,27 @@ class Access_1(QDialog): #класс первый, с кнопками "выбр
 
     def ret(self): #дать доступ (передача в бд и закрытие диалога)
 
-        with open('../db/number_kab.txt', 'r') as f: #здесь записан номер выбранного кабинета
+        with open('db/number_kab.txt', 'r') as f: #здесь записан номер выбранного кабинета
             kab = f.readline().strip()
-            le = sqlite3.connect("../db/students.sqlite")
-            cur2 = le.cursor()
-            a = int(cur2.execute('''SELECT * from accesses''').fetchall()[-1][-2]) + 1 #последний id в таблице доступа
-            times = sqlite3.connect("../db/students.sqlite")
+
+            times = sqlite3.connect("db/students.sqlite")
             cur = times.cursor()
             que = '''SELECT * from ti''' #открытие таблицы, где записаны пары времени, начала и конца, на которое дать доступ
             data = cur.execute(que, ).fetchall()
             for i in self.stu: #список учеников
                 for j in data: #временные пары
+                    le = sqlite3.connect("db/students.sqlite")
+                    cur2 = le.cursor()
+                    a = int(cur2.execute('''SELECT * from accesses''').fetchall()[-1][
+                                -2]) + 1  # последний id в таблице доступа
                     k = str(int(random() * 1000)) #key доступа
                     information = (i, kab, self.teacher_email, j[0], j[1], a, k) #информация доступа: ученик, кабинет, логин учителя, ырем яначала, время конца и ключ
                     cur2.execute("INSERT INTO accesses (mail_of_student, kab, mail_of_teacher, data_since, data_before, id, key) VALUES(?, ?, ?, ?, ?, ?, ?)", information)
                     le.commit() #добавление и комит
                     msg = QMessageBox()
                     msg.setIcon(QMessageBox.Information)
-                    msg.setText("успешно добавлено!")
-                    msg.setWindowTitle(f"id: {a}, key = {k}")
+                    msg.setText(f"id:{a}, key:{k}")
+                    msg.setWindowTitle("успешно добавлено!")
                     msg.exec_()  # сообщение об успешном добавлении и вывод ключа
             self.close()
 
@@ -74,17 +76,19 @@ class Access_2(QDialog): #класс второй с кнопками "выбр�
         self.access.clicked.connect(self.ret)
 
     def ret(self): #передача информации в базу данных и закрытие окна
-        with open('../db/login_student.txt', 'r') as f:  # здесь записан логин ученика выбранного кабинета
+        with open('db/login_student.txt', 'r') as f:  # здесь записан логин ученика выбранного кабинета
             stu = f.readline().strip()
-            le = sqlite3.connect("../db/students.sqlite")
-            cur2 = le.cursor()
-            a = int(cur2.execute('''SELECT * from accesses''').fetchall()[-1][-2]) + 1  # последний id в таблице доступа
-            times = sqlite3.connect("../db/students.sqlite")
+
+            times = sqlite3.connect("db/students.sqlite")
             cur = times.cursor()
             que = '''SELECT * from ti'''  # открытие таблицы, где записаны пары времени, начала и конца, на которое дать доступ
             data = cur.execute(que, ).fetchall()
             for j in data:  # временные пары
                 k = str(int(random() * 1000))  # key доступа
+                le = sqlite3.connect("db/students.sqlite")
+                cur2 = le.cursor()
+                a = int(
+                    cur2.execute('''SELECT * from accesses''').fetchall()[-1][-2]) + 1  # последний id в таблице доступа
                 information = (stu, self.kab, self.teacher_email, j[0], j[1], a, k)  # информация доступа: ученик, кабинет, логин учителя, ырем яначала, время конца и ключ
                 cur2.execute(
                     "INSERT INTO accesses (mail_of_student, kab, mail_of_teacher, data_since, data_before, id, key) VALUES(?, ?, ?, ?, ?, ?, ?)",
@@ -92,8 +96,8 @@ class Access_2(QDialog): #класс второй с кнопками "выбр�
                 le.commit()  # добавление и комит
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Information)
-                msg.setText("успешно добавлено!")
-                msg.setWindowTitle(f"id: {a}, key = {k}")
+                msg.setText(f"id:{a}, key:{k}")
+                msg.setWindowTitle("успешно добавлено!")
                 msg.exec_()  # сообщение об успешном добавлении и вывод ключа
             self.close()
 

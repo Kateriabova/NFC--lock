@@ -39,7 +39,7 @@ class Time(QDialog):
         else:
             self.times = [] #если нет, то список временных промежутков пустой
         for i in self.numbers:
-            le = sqlite3.connect("../db/students.sqlite")
+            le = sqlite3.connect("db/students.sqlite")
             cur2 = le.cursor()
             que = '''SELECT * from lessons WHERE number = ?''' #подключение к базе данных времени уроков
             data = cur2.execute(que, (i,)).fetchall()
@@ -49,7 +49,7 @@ class Time(QDialog):
             t_2 = a + ' ' + e + ':00' #на основе этого создается время: дата + время по бд + секунды
             t = (t_1, t_2) #пара в кортеж, а тот - в список
             self.times.append(t)
-        times = sqlite3.connect("../db/students.sqlite")
+        times = sqlite3.connect("db/students.sqlite")
         cur2 = times.cursor()
         cur2.execute("""CREATE TABLE IF NOT EXISTS ti(
            time_b TEXT, 

@@ -7,7 +7,7 @@ import sys
 from py.access import Access_1
 import sqlite3
 import datetime as dt
-from py.find_page import Find
+
 
 
 def excepthook(exc_type, exc_value, exc_tb):
@@ -55,7 +55,7 @@ class Student(QMainWindow):
             for i, elem in enumerate(data):
                 self.table_lessons.setItem(i, 0, QTableWidgetItem(elem)) #расписание выводится на экран через табличку
 
-        accesses = sqlite3.connect("../db/students.sqlite")
+        accesses = sqlite3.connect("db/students.sqlite")
         cur2 = accesses.cursor()
         data = cur2.execute("""SELECT * FROM accesses
                             WHERE mail_of_student = ?""", (self.fio['email'],)).fetchall() #поиск кабинетов к которым ученик имеет доступ
@@ -68,10 +68,10 @@ class Student(QMainWindow):
                     if j != 0:
                         self.table_kab.setItem(i, j - 1, QTableWidgetItem(val))
 
-            self.btn = QPushButton('ОТМЕНИТЬ  id = ' + str(elem[5]))
-            self.btn.clicked.connect(self.delete)
-            self.table_kab.setCellWidget(i, 5, self.btn)  # (r, c)
-            self.btn.setObjectName('btn' + self.fio['email']) #формирование таблички с кнопками "забрать доступ"
+                    self.btn = QPushButton('ОТМЕНИТЬ  id = ' + str(elem[5]))
+                    self.btn.clicked.connect(self.delete)
+                    self.table_kab.setCellWidget(i, 5, self.btn)  # (r, c)
+                    self.btn.setObjectName('btn' + self.fio['email']) #формирование таблички с кнопками "забрать доступ"
         else:
             self.table_kab.setRowCount(len(data))
             self.table_kab.setColumnCount(0)#нулевая таблица
@@ -84,7 +84,7 @@ class Student(QMainWindow):
     def delete(self): #забрать доступ
         name, ok_pressed = QInputDialog.getText(self, "Подтвердите свои полномочия",
                                                 "Введите key") #подтверждения ключом
-        accesses = sqlite3.connect("../db/students.sqlite")
+        accesses = sqlite3.connect("db/students.sqlite")
         cur2 = accesses.cursor()
         x = self.sender()
         em = x.text()[9:].split()[-1]
@@ -93,7 +93,7 @@ class Student(QMainWindow):
             if name == data[0][0]:
                 cur2.execute("""DELETE FROM accesses WHERE id = ?""", (em,)) #если пароль совпал удаление и комит
                 accesses.commit()
-                accesses = sqlite3.connect("../db/students.sqlite")
+                accesses = sqlite3.connect("db/students.sqlite")
                 cur2 = accesses.cursor()
                 data = cur2.execute("""SELECT * FROM accesses
                                             WHERE mail_of_student = ?""", (self.fio['email'],)).fetchall()
@@ -106,10 +106,10 @@ class Student(QMainWindow):
                             if j != 0:
                                 self.table_kab.setItem(i, j - 1, QTableWidgetItem(val))
 
-                    self.btn = QPushButton('ОТМЕНИТЬ  id = ' + str(elem[5]))
-                    self.btn.clicked.connect(self.delete)
-                    self.table_kab.setCellWidget(i, 5, self.btn)  # (r, c)
-                    self.btn.setObjectName('btn' + self.fio['email'])
+                            self.btn = QPushButton('ОТМЕНИТЬ  id = ' + str(elem[5]))
+                            self.btn.clicked.connect(self.delete)
+                            self.table_kab.setCellWidget(i, 5, self.btn)  # (r, c)
+                            self.btn.setObjectName('btn' + self.fio['email'])
                 else:
                     self.table_kab.setRowCount(len(data))
                     self.table_kab.setColumnCount(0)
@@ -121,7 +121,5 @@ class Student(QMainWindow):
                 msg.exec_() #в случае неверного ключа выводится сообщение об ошибке
 
     def returning(self): #возврат на страницу поиска
-        self.fn = Find(self.teacher_email)
         self.close()
-        self.fn.show()
 

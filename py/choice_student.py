@@ -19,7 +19,7 @@ class Stu(QDialog):
     def __init__(self):
         super().__init__()
         uic.loadUi('ui/student_choice.ui', self)
-        kab = sqlite3.connect("../db/students.sqlite")
+        kab = sqlite3.connect("db/students.sqlite")
         cur = kab.cursor()
         que = '''SELECT * from students''' #формирование таблицы поиска table_student
         data = cur.execute(que).fetchall()
@@ -39,9 +39,9 @@ class Stu(QDialog):
         self.ok.clicked.connect(self.ret) #нажатие на кнопку ок
     def puding(self):
         x = self.sender().text() #email
-        with open('../db/login_student.txt', 'w') as f:
+        with open('db/login_student.txt', 'w') as f:
             pass
-        with open('../db/login_student.txt', 'w') as f:
+        with open('db/login_student.txt', 'w') as f:
             print(x, file=f) #очистили файл для записи и записали логин ученика
 
     def ret(self):
